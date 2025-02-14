@@ -1,0 +1,331 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Certification {
+  certificationName: String!
+  company: Company!
+  id: ID!
+  status: String!
+}
+
+type Company {
+  certifications: [Certification!]!
+  companyName: String
+  coverImage: String
+  description: String
+  founded: String
+  headquarters: String
+  id: ID!
+  industries: [String!]
+  legalName: String
+  locations: [CompanyLocation!]!
+  logo: String
+  owner: User!
+  services: [CompanyService!]!
+  size: String
+  socialLinks: [String!]
+  tagline: String
+  users: [User!]
+  website: String
+}
+
+type CompanyLocation {
+  address: String!
+  city: String!
+  company: Company!
+  contacts: String!
+  country: String!
+  id: ID!
+  status: String!
+}
+
+type CompanyService {
+  company: Company!
+  id: ID!
+  serviceName: String!
+  status: String!
+}
+
+"""Type of contact"""
+enum ContactType {
+  FINANCIAL
+  OPERATION
+  PARTNERSHIPS
+  QUOTES
+}
+
+input CreateCompanyInput {
+  companyName: String!
+  companySize: String
+  coverImage: String
+  description: String
+  legalName: String
+  website: String
+}
+
+input CreateCompanyLocationInput {
+  address: String!
+  city: String!
+  contacts: String!
+  country: String!
+  status: String!
+}
+
+input CreateUserAdditionalInfoInput {
+  contactSpecification: String
+  contactType: [ContactType!]
+  email: String
+  msg: Boolean! = false
+  phoneno: String
+  whatsapp: Boolean! = false
+}
+
+input CreateUserInput {
+  JobRole: JobProfile
+  LinkedinProfile: String
+  additionalInfo: CreateUserAdditionalInfoInput
+  confirmPassword: String!
+  email: String!
+  firstName: String
+  imageurl: String
+  lastName: String
+  location: [location!]
+  password: String!
+  phone: String
+  timezone: timezone
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Invitation {
+  accepted: Boolean!
+  contactRole: String
+  email: String!
+  firstName: String
+  id: ID!
+  jobRole: JobProfile
+  lastName: String
+  team: Team!
+  token: String!
+}
+
+input InviteTeamMemberInput {
+  JobRole: JobProfile!
+  canManageTeam: Boolean
+  email: String!
+  firstName: String
+  lastName: String
+  location: [location!]
+}
+
+type Invoice {
+  amount: Float!
+  id: ID!
+  invoiceId: String!
+  invoiceUrl: String!
+  status: String!
+  user: User!
+}
+
+"""Designation of the job profile"""
+enum JobProfile {
+  Business_Dev_Sales
+  Financial
+  Manager
+  Owner_Director
+  Partnership_Dev
+  Pricing
+}
+
+type LoginResponse {
+  access_token: String!
+  user: UserInfo!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  assignUserToCompany(companyId: ID!, userId: ID!): User!
+  cancelSubscription(subscriptionId: String!): Boolean!
+  capturePayment(amount: Float!, currency: String!, paymentId: String!): Payment!
+  completePayment(amount: Float!, orderId: String!): Payment!
+  confirmPayment(orderId: String!, paymentId: String!, razorpaySignature: String!): Boolean!
+  createAndStorePlan(amount: Float!, currency: String!, interval: Float!, name: String!, period: String!): Plan!
+  createCompany(createCompanyInput: CreateCompanyInput!, userId: ID!): Company!
+  createCompanyLocation(companyId: ID!, input: CreateCompanyLocationInput!): CompanyLocation!
+  createSubscription(planId: String!, userId: Float!): Subscription!
+  createUser(createUserInput: CreateUserInput!): User!
+  createorder(amount: Float!, currency: String!, userId: Float!): Payment!
+  deleteUser(id: ID!): Boolean!
+  generateOtp(email: String!): String!
+  inviteUser(id: ID!, input: InviteTeamMemberInput!): User!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
+  logout: Boolean!
+  resetPassword(resetPasswordInput: ResetPasswordInput!, userid: Float!): User!
+  savePaymentMethod(paymentToken: String!, userId: Float!): Boolean!
+  setupPassword(confirmPassword: String!, newPassword: String!, userId: Float!): User!
+  updateCompanyServices(companyId: ID!, input: UpdateCompanyServicesInput!): Company!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  verifyOtp(email: String!, otp: String!): Boolean!
+}
+
+type Payment {
+  amount: Float!
+  currency: String!
+  id: ID!
+  paymentId: String!
+  receiptUrl: String
+  status: String!
+  subscription: Subscription
+  user: User!
+}
+
+type Plan {
+  amount: Float!
+  currency: String!
+  id: ID!
+  interval: Float!
+  name: String!
+  period: String!
+  planId: String!
+}
+
+type Query {
+  findUserByEmail(email: String!): User
+  getAllCompanies: [Company!]!
+  getAllUsers: [User!]!
+  getCompanyById(id: ID!): Company!
+  getTeamMembers(companyId: Float!): [User!]!
+  getUserById(id: ID!): User!
+  getUserInvoices(userId: Float!): [Invoice!]!
+  getUsersByCompany(companyId: Int!): [User!]!
+}
+
+input ResetPasswordInput {
+  confirmPassword: String!
+  newPassword: String!
+  oldPassword: String!
+}
+
+type Subscription {
+  endDate: DateTime
+  id: ID!
+  payments: [Payment!]
+  planId: String!
+  startDate: DateTime!
+  status: String!
+  subscriptionId: String!
+  user: User!
+}
+
+type Team {
+  id: ID!
+  invitations: [Invitation!]
+  name: String!
+}
+
+input UpdateCompanyServicesInput {
+  services: [String!]!
+}
+
+input UpdateUserInput {
+  JobRole: JobProfile
+  additionalInfo: CreateUserAdditionalInfoInput
+  confirmPassword: String
+  email: String
+  firstName: String
+  id: ID!
+  lastName: String
+  location: [location!]
+  password: String
+  phone: String
+  timezone: timezone
+}
+
+type User {
+  JobRole: JobProfile
+  LinkedinProfile: String
+  additionalInfo: UserAdditionalInfo
+  companies: [Company!]
+  company: Company
+  confirmPassword: String
+  email: String!
+  firstName: String
+  id: ID!
+  imageurl: String
+  invoices: [Invoice!]
+  lastName: String
+  location: [location!]
+  otp: String
+  password: String!
+  paymentMethodToken: String
+  payments: [Payment!]
+  phone: String
+  razorpayCustomerId: String
+  status: invitationTeamMember
+  subscription: Subscription
+  timezone: timezone
+}
+
+type UserAdditionalInfo {
+  contactSpecification: String
+  contactType: [ContactType!]
+  email: String
+  id: ID!
+  msg: Boolean
+  phoneno: String
+  user: User!
+  whatsapp: Boolean
+}
+
+type UserInfo {
+  company: Company
+  email: String!
+  id: Float!
+  phone: String
+}
+
+"""Invite New Team Member"""
+enum invitationTeamMember {
+  accepted
+  pending
+  rejected
+}
+
+"""Location of member"""
+enum location {
+  Chandigarh_India
+  Chennai_India
+  Dehradun_India
+  Kochin_India
+  Mumbai_India
+  Noida_India
+}
+
+"""timezone of country """
+enum timezone {
+  Asia_Almaty
+  Asia_Amman
+  Asia_Baghdad
+  Asia_Bangkok
+  Asia_Beirut
+  Asia_Bhaku
+  Asia_Calcutta
+  Asia_Colombo
+  Asia_Dhaka
+  Asia_Dubai
+  Asia_Ho_Chi_Minh
+  Asia_HongKong
+  Asia_Hovd
+  Asia_Jerusalem
+  Asia_Kabul
+  Asia_Karachi
+  Asia_jakarta
+}

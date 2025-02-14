@@ -1,0 +1,9 @@
+{
+  "auths": {},
+  "credsStore": "",
+  "credHelpers": {},
+  "experimental": "disabled",
+  "features": {
+    "buildkit": true
+  }
+}

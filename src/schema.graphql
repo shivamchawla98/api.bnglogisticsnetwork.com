@@ -1,0 +1,526 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Certification {
+  certificationName: String!
+  company: Company!
+  id: ID!
+  status: String!
+}
+
+input CertificationInput {
+  certificationName: String!
+  status: String!
+}
+
+type Company {
+  certifications: [Certification!]!
+  companyName: String
+  companyRegistration: String
+  companyType: CompanyType
+  coverImage: String
+  description: String
+  founded: String
+  headquarters: String
+  id: ID!
+  incorporationDate: String
+  industries: [String!]
+  legalName: String
+  locations: [CompanyLocation!]!
+  logo: String
+  owner: User!
+  services: [CompanyService!]!
+  size: String
+  socialLinks: [String!]
+  tagline: String
+  taxId: String
+  users: [User!]
+  website: String
+}
+
+type CompanyLocation {
+  address: String
+  city: String
+  company: Company!
+  contactRoles: [LocationContact!]
+  contactUsers: [User!]
+  country: String
+  departments: [FunctionalDepartment!]
+  id: ID!
+  isPrimary: Boolean!
+  phone: String
+  pincode: String
+  status: String
+  timezone: String!
+}
+
+type CompanyService {
+  company: Company!
+  id: ID!
+  isSpecialization: Boolean!
+  serviceName: ServiceType!
+  status: String!
+}
+
+"""The type of company"""
+enum CompanyType {
+  LLP
+  OTHER
+  PARTNERSHIP
+  PRIVATE
+  PROPRIETORSHIP
+  PUBLIC
+}
+
+"""Type of contact"""
+enum ContactType {
+  FINANCIAL
+  OPERATION
+  PARTNERSHIPS
+  QUOTES
+}
+
+input CreateCompanyInput {
+  companyName: String!
+  companySize: String
+  coverImage: String
+  description: String
+  legalName: String
+  website: String
+}
+
+input CreateCompanyLocationInput {
+  address: String!
+  city: String!
+  contactRoles: [LocationContactInput!]
+  country: String!
+  departments: [FunctionalDepartment!]
+  isPrimary: Boolean! = false
+  phone: String
+  pincode: String
+  state: String
+  status: String
+  timezone: String
+}
+
+input CreateUserAdditionalInfoInput {
+  contactSpecification: String
+  contactType: [ContactType!]
+  email: String
+  msg: Boolean! = false
+  phoneno: String
+  whatsapp: Boolean! = false
+}
+
+input CreateUserInput {
+  LinkedinProfile: String
+  additionalInfo: CreateUserAdditionalInfoInput
+  email: String!
+  firstName: String
+  jobRole: JobRole
+  lastName: String
+  password: String!
+  phone: String
+  status: UserStatus! = ACTIVE
+  timezone: Timezone
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""Available functional departments"""
+enum FunctionalDepartment {
+  CUSTOMER_SERVICE
+  CUSTOMS
+  FINANCE
+  HR
+  IT
+  MARKETING
+  OPERATIONS
+  PROCUREMENT
+  SALES
+  WAREHOUSING
+}
+
+type Invitation {
+  accepted: Boolean!
+  contactRole: String
+  email: String!
+  firstName: String
+  id: ID!
+  jobRole: JobRole
+  lastName: String
+  team: Team!
+  token: String!
+}
+
+input InviteTeamMemberInput {
+  JobRole: JobRole!
+  canManageTeam: Boolean
+  confirmPassword: String!
+  email: String!
+  firstName: String
+  lastName: String
+  location: [location!]
+  password: String!
+}
+
+type Invoice {
+  amount: Float!
+  id: ID!
+  invoiceId: String!
+  invoiceUrl: String!
+  status: String!
+  user: User!
+}
+
+"""Designation of the job profile"""
+enum JobRole {
+  Accounting_Executive
+  Admin_Executive
+  Air_Freight_Specialist
+  Branch_Manager
+  CEO
+  COO
+  CTO
+  Chartering_Executive
+  Client_Relationship_Manager
+  Client_Solutions_Specialist
+  Client_Support_Specialist
+  Consolidation_Specialist
+  Credit_Controller
+  Customer_Service_Representative
+  Customer_Success_Specialist
+  DGR_Specialist
+  Director
+  Dispatch_Coordinator
+  Finance_Manager
+  Fleet_Manager
+  Founder
+  Freight_Manager
+  General_Manager
+  Logistics_Manager
+  Managing_Director
+  Marketing_Executive
+  Ocean_Freight_Specialist
+  Overseas_Coordinator
+  Overseas_Manager
+  President
+  Project_Manager
+  Regional_Manager
+  Regulatory_Affairs_Specialist
+  Road_Freight_Specialist
+  Sales_Business_Dev_Manager
+  Sales_Executive
+  Sales_Support_Coordinator
+  Service_Delivery_Manager
+  Shipping_Line_Coordinator
+  Vice_President
+  Warehouse_Specialist
+}
+
+type LocationContact {
+  role: String!
+  userId: ID!
+}
+
+input LocationContactInput {
+  role: String!
+  userId: ID!
+}
+
+type LocationFilters {
+  cities: [String!]!
+  countries: [String!]!
+}
+
+type LoginResponse {
+  access_token: String!
+  user: UserInfo!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  assignUserToCompany(companyId: ID!, userId: ID!): User!
+  cancelSubscription(subscriptionId: String!): Boolean!
+  capturePayment(amount: Float!, currency: String!, paymentId: String!): Payment!
+  completePayment(amount: Float!, orderId: String!): Payment!
+  confirmPayment(orderId: String!, paymentId: String!, razorpaySignature: String!): Boolean!
+  createAndStorePlan(amount: Float!, currency: String!, interval: Float!, name: String!, period: String!): Plan!
+  createCompany(createCompanyInput: CreateCompanyInput!, userId: ID!): Company!
+  createCompanyLocation(companyId: ID!, input: CreateCompanyLocationInput!): CompanyLocation!
+  createSubscription(planId: String!, userId: Float!): Subscription!
+  createUser(createUserInput: CreateUserInput!): User!
+  createorder(amount: Float!, currency: String!, userId: Float!): Payment!
+  deleteUser(id: ID!): Boolean!
+  generateInviteCodes(count: Float): Boolean!
+  generateOtp(email: String!): String!
+  inviteUser(id: ID!, input: InviteTeamMemberInput!): User!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
+  logout: Boolean!
+  resetPassword(resetPasswordInput: ResetPasswordInput!, userid: Float!): User!
+  savePaymentMethod(paymentToken: String!, userId: Float!): Boolean!
+  setupPassword(confirmPassword: String!, newPassword: String!, userId: Float!): User!
+  updateCompanyCertifications(companyId: ID!, input: UpdateCompanyCertificationsInput!): Company!
+  updateCompanyLocation(input: UpdateCompanyLocationInput!, locationId: ID!): CompanyLocation!
+  updateCompanyLogo(companyId: ID!, logo: String!): Company!
+  updateCompanyProfile(companyid: ID!, input: UpdateCompanyProfileInput!): Company!
+  updateCompanyServices(companyId: ID!, input: UpdateCompanyServicesInput!): Company!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  verifyOtp(email: String!, otp: String!): Boolean!
+}
+
+type Payment {
+  amount: Float!
+  currency: String!
+  id: ID!
+  paymentId: String!
+  receiptUrl: String
+  status: String!
+  subscription: Subscription
+  user: User!
+}
+
+type Plan {
+  amount: Float!
+  currency: String!
+  id: ID!
+  interval: Float!
+  name: String!
+  period: String!
+  planId: String!
+}
+
+type Query {
+  findUserByEmail(email: String!): User
+  getAllCompanies: [Company!]!
+  getAllUsers: [User!]!
+  getCompanyById(id: ID!): Company!
+  getCompanyProfile(companyId: ID!): Company!
+  getCompanyWithCertifications(companyId: ID!): Company!
+  getLocationFilters: LocationFilters!
+  getTeamMembers(companyId: Float!): [User!]!
+  getUserById(id: ID!): User!
+  getUserInvoices(userId: Float!): [Invoice!]!
+  getUsersByCompany(companyId: Int!): [User!]!
+  searchCompanies(city: String, country: String, query: String): [Company!]!
+  validateInviteCode(code: String!): Boolean!
+}
+
+input ResetPasswordInput {
+  confirmPassword: String!
+  newPassword: String!
+  oldPassword: String!
+}
+
+input ServiceInput {
+  isSpecialization: Boolean! = false
+  serviceName: ServiceType!
+  status: String!
+}
+
+"""Available logistics and supply chain services"""
+enum ServiceType {
+  AIR_FREIGHT
+  AUTOMOTIVE_SUPPLY_CHAIN
+  AVIATION_AEROSPACE
+  BREAK_BULK
+  COLD_CHAIN_HANDLING
+  CONSOLIDATION
+  CUSTOMS_BROKERAGE
+  DANGEROUS_GOODS
+  ECOMMERCE
+  EXHIBITION_HANDLING
+  HOUSEHOLD_MOVERS
+  LIVE_ANIMALS
+  OCEAN_FREIGHT_FCL
+  OCEAN_FREIGHT_LCL
+  PACKAGING_KITTING
+  PACKING_SERVICES
+  PERISHABLE_CARGO
+  PHARMA_HEALTHCARE
+  PROJECT_CARGO
+  RAIL_FREIGHT
+  RELOCATION
+  RETAIL_LOGISTICS
+  TIME_CRITICAL
+  TRUCKING
+  WAREHOUSING
+}
+
+type Subscription {
+  endDate: DateTime
+  id: ID!
+  payments: [Payment!]
+  planId: String!
+  startDate: DateTime!
+  status: String!
+  subscriptionId: String!
+  user: User!
+}
+
+type Team {
+  id: ID!
+  invitations: [Invitation!]
+  name: String!
+}
+
+"""Standard IANA timezone identifiers with underscores instead of slashes"""
+enum Timezone {
+  Africa_Cairo
+  Africa_Casablanca
+  Africa_Johannesburg
+  Africa_Lagos
+  Africa_Nairobi
+  America_Buenos_Aires
+  America_Chicago
+  America_Denver
+  America_Los_Angeles
+  America_Mexico_City
+  America_New_York
+  America_Phoenix
+  America_Sao_Paulo
+  America_Toronto
+  America_Vancouver
+  Asia_Almaty
+  Asia_Amman
+  Asia_Baghdad
+  Asia_Bangkok
+  Asia_Beirut
+  Asia_Calcutta
+  Asia_Colombo
+  Asia_Dhaka
+  Asia_Dubai
+  Asia_Ho_Chi_Minh
+  Asia_Hong_Kong
+  Asia_Jakarta
+  Asia_Jerusalem
+  Asia_Kabul
+  Asia_Karachi
+  Asia_Kolkata
+  Asia_Kuala_Lumpur
+  Asia_Manila
+  Asia_Riyadh
+  Asia_Seoul
+  Asia_Shanghai
+  Asia_Singapore
+  Asia_Tehran
+  Asia_Tokyo
+  Australia_Melbourne
+  Australia_Perth
+  Europe_Amsterdam
+  Europe_Berlin
+  Europe_Brussels
+  Europe_Istanbul
+  Europe_London
+  Europe_Madrid
+  Europe_Moscow
+  Europe_Paris
+  Europe_Rome
+  Europe_Stockholm
+  Europe_Vienna
+  Europe_Warsaw
+  Pacific_Auckland
+  Pacific_Sydney
+  UTC
+}
+
+input UpdateCompanyCertificationsInput {
+  certifications: [CertificationInput!]!
+}
+
+input UpdateCompanyLocationInput {
+  address: String
+  city: String
+  contacts: String
+  country: String
+  departments: [FunctionalDepartment!]
+  isPrimary: Boolean
+  phone: String
+  pincode: String
+  status: String
+  timezone: String
+}
+
+input UpdateCompanyProfileInput {
+  companyName: String
+  companyRegistration: String
+  companyType: CompanyType
+  coverImage: String
+  description: String
+  incorporationDate: String
+  legalName: String
+  logo: String
+  size: String
+  taxId: String
+  website: String
+}
+
+input UpdateCompanyServicesInput {
+  services: [ServiceInput!]!
+}
+
+input UpdateUserInput {
+  JobRole: JobRole
+  additionalInfo: CreateUserAdditionalInfoInput
+  confirmPassword: String
+  email: String
+  firstName: String
+  id: ID!
+  lastName: String
+  password: String
+  phone: String
+}
+
+type User {
+  JobRole: JobRole
+  LinkedinProfile: String
+  companies: [Company!]
+  company: Company
+  confirmPassword: String
+  email: String!
+  firstName: String
+  id: ID!
+  imageurl: String
+  invoices: [Invoice!]
+  lastName: String
+  otp: String
+  password: String!
+  paymentMethodToken: String
+  payments: [Payment!]
+  phone: String
+  razorpayCustomerId: String
+  subscription: Subscription
+}
+
+type UserInfo {
+  company: Company
+  email: String!
+  id: Float!
+  phone: String
+}
+
+"""User status enum"""
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+  INACTIVE
+  PENDING
+}
+
+"""Location of member"""
+enum location {
+  Chandigarh_India
+  Chennai_India
+  Dehradun_India
+  Kochin_India
+  Mumbai_India
+  Noida_India
+}

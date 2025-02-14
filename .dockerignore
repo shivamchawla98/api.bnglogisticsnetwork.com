@@ -1,0 +1,14 @@
+node_modules
+.git
+.env
+*.md
+*.log
+.DS_Store
+coverage
+.vscode
+test
+__tests__
+*.test.*
+*.spec.*
+.aws-sam
+dist

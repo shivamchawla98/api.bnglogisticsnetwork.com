@@ -1,0 +1,47 @@
+# Source files
+src/
+test/
+coverage/
+.vscode/
+.idea/
+.git/
+.gitignore
+.env
+.env.*
+.eslintrc.js
+.prettierrc
+README.md
+tsconfig.json
+tsconfig.build.json
+jest.config.js
+nodemon.json
+
+# Build artifacts
+dist/
+node_modules/
+.aws-sam/
+.serverless/
+
+# Development files
+*.spec.ts
+*.test.ts
+*.map
+*.log
+*.tsbuildinfo
+
+# Documentation
+docs/
+*.md
+
+# IDE specific files
+*.iml
+*.iws
+*.ipr
+.idea/
+.vscode/
+
+# Temp files
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

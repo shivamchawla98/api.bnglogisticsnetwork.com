@@ -1,0 +1,12 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "bng-app"
+resolve_s3 = true
+s3_prefix = "bng-app"
+region = "ap-south-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+parameter_overrides = "Environment=\"production\" DBUsername=\"postgres\" DBPassword=\"BNG_password123!\" DBDatabase=\"db_bng_new\" DBName=\"db_bng_new\" JWTExpiresIn=\"1d\""
+image_repositories = []
+profile = "bng-project"

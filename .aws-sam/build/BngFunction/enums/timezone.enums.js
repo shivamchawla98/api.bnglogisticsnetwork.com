@@ -1,0 +1,68 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Timezone = void 0;
+const graphql_1 = require("@nestjs/graphql");
+var Timezone;
+(function (Timezone) {
+    Timezone["Asia_Calcutta"] = "Asia_Calcutta";
+    Timezone["Asia_Kolkata"] = "Asia_Kolkata";
+    Timezone["Asia_Bangkok"] = "Asia_Bangkok";
+    Timezone["Asia_Colombo"] = "Asia_Colombo";
+    Timezone["Asia_Dhaka"] = "Asia_Dhaka";
+    Timezone["Asia_Dubai"] = "Asia_Dubai";
+    Timezone["Asia_Hong_Kong"] = "Asia_Hong_Kong";
+    Timezone["Asia_Ho_Chi_Minh"] = "Asia_Ho_Chi_Minh";
+    Timezone["Asia_Almaty"] = "Asia_Almaty";
+    Timezone["Asia_Amman"] = "Asia_Amman";
+    Timezone["Asia_Baghdad"] = "Asia_Baghdad";
+    Timezone["Asia_Beirut"] = "Asia_Beirut";
+    Timezone["Asia_Jakarta"] = "Asia_Jakarta";
+    Timezone["Asia_Jerusalem"] = "Asia_Jerusalem";
+    Timezone["Asia_Kabul"] = "Asia_Kabul";
+    Timezone["Asia_Karachi"] = "Asia_Karachi";
+    Timezone["Asia_Singapore"] = "Asia_Singapore";
+    Timezone["Asia_Tokyo"] = "Asia_Tokyo";
+    Timezone["Asia_Shanghai"] = "Asia_Shanghai";
+    Timezone["Asia_Seoul"] = "Asia_Seoul";
+    Timezone["Asia_Manila"] = "Asia_Manila";
+    Timezone["Asia_Kuala_Lumpur"] = "Asia_Kuala_Lumpur";
+    Timezone["Asia_Riyadh"] = "Asia_Riyadh";
+    Timezone["Asia_Tehran"] = "Asia_Tehran";
+    Timezone["Europe_London"] = "Europe_London";
+    Timezone["Europe_Paris"] = "Europe_Paris";
+    Timezone["Europe_Berlin"] = "Europe_Berlin";
+    Timezone["Europe_Rome"] = "Europe_Rome";
+    Timezone["Europe_Madrid"] = "Europe_Madrid";
+    Timezone["Europe_Moscow"] = "Europe_Moscow";
+    Timezone["Europe_Istanbul"] = "Europe_Istanbul";
+    Timezone["Europe_Amsterdam"] = "Europe_Amsterdam";
+    Timezone["Europe_Brussels"] = "Europe_Brussels";
+    Timezone["Europe_Stockholm"] = "Europe_Stockholm";
+    Timezone["Europe_Vienna"] = "Europe_Vienna";
+    Timezone["Europe_Warsaw"] = "Europe_Warsaw";
+    Timezone["America_New_York"] = "America_New_York";
+    Timezone["America_Chicago"] = "America_Chicago";
+    Timezone["America_Los_Angeles"] = "America_Los_Angeles";
+    Timezone["America_Toronto"] = "America_Toronto";
+    Timezone["America_Mexico_City"] = "America_Mexico_City";
+    Timezone["America_Sao_Paulo"] = "America_Sao_Paulo";
+    Timezone["America_Buenos_Aires"] = "America_Buenos_Aires";
+    Timezone["America_Vancouver"] = "America_Vancouver";
+    Timezone["America_Denver"] = "America_Denver";
+    Timezone["America_Phoenix"] = "America_Phoenix";
+    Timezone["Pacific_Auckland"] = "Pacific_Auckland";
+    Timezone["Pacific_Sydney"] = "Pacific_Sydney";
+    Timezone["Australia_Melbourne"] = "Australia_Melbourne";
+    Timezone["Australia_Perth"] = "Australia_Perth";
+    Timezone["Africa_Cairo"] = "Africa_Cairo";
+    Timezone["Africa_Lagos"] = "Africa_Lagos";
+    Timezone["Africa_Johannesburg"] = "Africa_Johannesburg";
+    Timezone["Africa_Nairobi"] = "Africa_Nairobi";
+    Timezone["Africa_Casablanca"] = "Africa_Casablanca";
+    Timezone["UTC"] = "UTC";
+})(Timezone || (exports.Timezone = Timezone = {}));
+(0, graphql_1.registerEnumType)(Timezone, {
+    name: 'Timezone',
+    description: 'Standard IANA timezone identifiers with underscores instead of slashes'
+});
+//# sourceMappingURL=timezone.enums.js.map

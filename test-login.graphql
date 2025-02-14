@@ -1,0 +1,13 @@
+mutation {
+  login(loginUserInput: {
+    email: "shivam.chawla@exacodel.com",
+    password: "12345"
+  }) {
+    access_token
+    user {
+      id
+      email
+      phone
+    }
+  }
+}

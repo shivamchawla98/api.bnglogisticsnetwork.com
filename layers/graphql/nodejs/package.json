@@ -1,0 +1,13 @@
+{
+  "name": "graphql",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@nestjs/apollo": "^12.2.0",
+    "@nestjs/graphql": "^12.2.0",
+    "graphql": "^16.8.1"
+  }
+}

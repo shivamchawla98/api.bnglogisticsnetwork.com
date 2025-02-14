@@ -1,0 +1,7 @@
+{
+                "dependencies": {
+                    "@aws-sdk/client-ses": "^3.723.0",
+                    "@aws-sdk/client-s3": "latest",
+                    "@aws-sdk/client-secrets-manager": "latest"
+                }
+            }

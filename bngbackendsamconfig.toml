@@ -1,0 +1,11 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "bngbackend-sam-app"
+resolve_s3 = true
+s3_prefix = "bngbackend-sam-app"
+region = "ap-south-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+image_repositories = []
+parameter_overrides = "Environment=\"production\" DBName=\"postgres\" JWTExpiresIn=\"1d\""
