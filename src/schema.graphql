@@ -29,6 +29,7 @@ type Company {
   legalName: String
   locations: [CompanyLocation!]!
   logo: String
+  management: [Management!]
   owner: User!
   services: [CompanyService!]!
   size: String
@@ -102,6 +103,19 @@ input CreateCompanyLocationInput {
   state: String
   status: String
   timezone: String
+}
+
+input CreateManagementInput {
+  companyId: String!
+  department: FunctionalDepartment!
+  email: String!
+  firstName: String!
+  jobRole: String!
+  lastName: String!
+  linkedin: String
+  mobile: String!
+  profilePicture: String
+  whatsapp: String
 }
 
 input CreateUserAdditionalInfoInput {
@@ -247,6 +261,23 @@ input LoginUserInput {
   password: String!
 }
 
+type Management {
+  company: Company!
+  companyId: String!
+  createdAt: DateTime!
+  department: FunctionalDepartment!
+  email: String!
+  firstName: String!
+  id: ID!
+  jobRole: String!
+  lastName: String!
+  linkedin: String
+  mobile: String!
+  profilePicture: String
+  updatedAt: DateTime!
+  whatsapp: String
+}
+
 type Mutation {
   assignUserToCompany(companyId: ID!, userId: ID!): User!
   cancelSubscription(subscriptionId: String!): Boolean!
@@ -256,9 +287,11 @@ type Mutation {
   createAndStorePlan(amount: Float!, currency: String!, interval: Float!, name: String!, period: String!): Plan!
   createCompany(createCompanyInput: CreateCompanyInput!, userId: ID!): Company!
   createCompanyLocation(companyId: ID!, input: CreateCompanyLocationInput!): CompanyLocation!
+  createManagementMember(input: CreateManagementInput!): Management!
   createSubscription(planId: String!, userId: Float!): Subscription!
   createUser(createUserInput: CreateUserInput!): User!
   createorder(amount: Float!, currency: String!, userId: Float!): Payment!
+  deleteManagementMember(id: ID!): Boolean!
   deleteUser(id: ID!): Boolean!
   generateInviteCodes(count: Float): Boolean!
   generateOtp(email: String!): String!
@@ -273,6 +306,7 @@ type Mutation {
   updateCompanyLogo(companyId: ID!, logo: String!): Company!
   updateCompanyProfile(companyid: ID!, input: UpdateCompanyProfileInput!): Company!
   updateCompanyServices(companyId: ID!, input: UpdateCompanyServicesInput!): Company!
+  updateManagementMember(input: UpdateManagementInput!): Management!
   updateUser(updateUserInput: UpdateUserInput!): User!
   verifyOtp(email: String!, otp: String!): Boolean!
 }
@@ -303,9 +337,11 @@ type Query {
   getAllCompanies: [Company!]!
   getAllUsers: [User!]!
   getCompanyById(id: ID!): Company!
+  getCompanyManagement(companyId: ID!): [Management!]!
   getCompanyProfile(companyId: ID!): Company!
   getCompanyWithCertifications(companyId: ID!): Company!
   getLocationFilters: LocationFilters!
+  getManagementMember(id: ID!): Management!
   getTeamMembers(companyId: Float!): [User!]!
   getUserById(id: ID!): User!
   getUserInvoices(userId: Float!): [Invoice!]!
@@ -465,6 +501,19 @@ input UpdateCompanyProfileInput {
 
 input UpdateCompanyServicesInput {
   services: [ServiceInput!]!
+}
+
+input UpdateManagementInput {
+  department: FunctionalDepartment
+  email: String
+  firstName: String
+  id: ID!
+  jobRole: String
+  lastName: String
+  linkedin: String
+  mobile: String
+  profilePicture: String
+  whatsapp: String
 }
 
 input UpdateUserInput {

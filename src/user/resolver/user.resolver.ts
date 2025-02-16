@@ -63,11 +63,21 @@ export class UserResolver {
     return this.userService.deleteUser(id);
   }
   @Mutation(() => User)
-  async inviteUser(@Args('id', { type: () => ID }) id: number,
-                   @Args('input', { type: () => InviteTeamMemberInput}) input:InviteTeamMemberInput):Promise<User>{
-                    console.log("input in the resolver:", id, input.email)
-                    return this.userService.inviteTeamMember(id,input);
-                   }
+  async inviteUser(
+    @Args('id', { type: () => ID }) id: number,
+    @Args('input', { type: () => InviteTeamMemberInput, nullable: false }) input: InviteTeamMemberInput
+  ): Promise<User> {
+    console.log("Input received in resolver:", {
+      id,
+      input: JSON.stringify(input, null, 2)
+    });
+    
+    if (!input || !input.email) {
+      throw new Error('Invalid input: email is required');
+    }
+    
+    return this.userService.inviteTeamMember(id, input);
+  }
 
  @Query(() => [User], { name: 'getUsersByCompany' })
   async getUsersByCompany(

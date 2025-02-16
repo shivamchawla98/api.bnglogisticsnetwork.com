@@ -12,6 +12,9 @@ import { UpdateCompanyProfileInput } from './dto/update-company-profile.input';
 import { UpdateCompanyCertificationsInput } from './dto/update-company-certifications.input';
 import { Certification } from '../user/entity/certification.entity';
 import { UpdateCompanyLocationInput } from './dto/update-location.input';
+import { Management } from './entities/management.entity';
+import { CreateManagementInput } from './dto/create-management.input';
+import { UpdateManagementInput } from './dto/update-management.input';
 
 @Injectable()
 export class CompanyService {
@@ -26,6 +29,8 @@ export class CompanyService {
     private readonly serviceRepository: Repository<CompanyServiceEntity>,
     @InjectRepository(Certification)
     private readonly certificationRepository: Repository<Certification>,
+    @InjectRepository(Management)
+    private readonly managementRepository: Repository<Management>,
   ) {}
 
   async createCompany(createCompanyInput: CreateCompanyInput, userId: string): Promise<Company> {
@@ -58,7 +63,8 @@ export class CompanyService {
         'locations',
         'services',
         'certifications',
-        'users'
+        'users',
+        'management'
       ],
     });
 
@@ -91,7 +97,7 @@ export class CompanyService {
   async getCompanyProfile(companyId: string): Promise<Company> {
     const company = await this.companyRepository.findOne({
       where: { id: parseInt(companyId) },
-      relations: ['owner', 'locations', 'services', 'certifications'],
+      relations: ['owner', 'locations', 'services', 'certifications', 'management'],
     });
 
     if (!company) {
@@ -104,7 +110,7 @@ export class CompanyService {
   async updateCompanyProfile(companyId: string, updateData: UpdateCompanyProfileInput): Promise<Company> {
     const company = await this.companyRepository.findOne({
       where: { id: parseInt(companyId) },
-      relations: ['owner', 'locations', 'services', 'certifications'],
+      relations: ['owner', 'locations', 'services', 'certifications', 'management'],
     });
 
     if (!company) {
@@ -339,5 +345,66 @@ export class CompanyService {
       cities: cities.sort(),
       countries: countries.sort()
     };
+  }
+
+  async getCompanyManagement(companyId: string): Promise<Management[]> {
+    const company = await this.companyRepository.findOne({
+      where: { id: +companyId },
+      relations: ['management'],
+    });
+
+    if (!company) {
+      throw new NotFoundException(`Company with ID ${companyId} not found`);
+    }
+
+    return company.management || [];
+  }
+
+  async getManagementMember(id: string): Promise<Management> {
+    const member = await this.managementRepository.findOne({
+      where: { id },
+      relations: ['company'],
+    });
+
+    if (!member) {
+      throw new NotFoundException(`Management member with ID ${id} not found`);
+    }
+
+    return member;
+  }
+
+  async createManagementMember(input: CreateManagementInput): Promise<Management> {
+    const company = await this.companyRepository.findOne({
+      where: { id: +input.companyId },
+    });
+
+    if (!company) {
+      throw new NotFoundException(`Company with ID ${input.companyId} not found`);
+    }
+
+    const member = this.managementRepository.create({
+      ...input,
+      company,
+    });
+
+    return this.managementRepository.save(member);
+  }
+
+  async updateManagementMember(input: UpdateManagementInput): Promise<Management> {
+    const member = await this.managementRepository.findOne({
+      where: { id: input.id },
+    });
+
+    if (!member) {
+      throw new NotFoundException(`Management member with ID ${input.id} not found`);
+    }
+
+    Object.assign(member, input);
+    return this.managementRepository.save(member);
+  }
+
+  async deleteManagementMember(id: string): Promise<boolean> {
+    const result = await this.managementRepository.delete(id);
+    return result.affected > 0;
   }
 }
