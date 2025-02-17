@@ -49,8 +49,20 @@ async function bootstrap() {
     app.use(cookieParser());
 
     // Configure body parser limits
-    // app.use(express.json({ limit: '50mb' }));
-    // app.use(express.urlencoded({ limit: '50mb', extended: true }));
+    app.use(express.json({ limit: '50mb' }));
+    app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+    // Add garbage collection logging
+    let lastUsage = process.memoryUsage();
+    setInterval(() => {
+      const currentUsage = process.memoryUsage();
+      console.log('Memory usage stats:', {
+        heapUsed: `${Math.round((currentUsage.heapUsed - lastUsage.heapUsed) / 1024 / 1024 * 100) / 100} MB`,
+        heapTotal: `${Math.round(currentUsage.heapTotal / 1024 / 1024 * 100) / 100} MB`,
+        rss: `${Math.round(currentUsage.rss / 1024 / 1024 * 100) / 100} MB`,
+      });
+      lastUsage = currentUsage;
+    }, 30000); // Log every 30 seconds
 
     const pgSessionStore = pgSession(session);
 
