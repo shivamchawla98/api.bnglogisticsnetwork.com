@@ -5,6 +5,7 @@ import * as session from 'express-session';
 import * as pgSession from 'connect-pg-simple';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import * as express from 'express';
 
 async function bootstrap() {
   try {
@@ -46,6 +47,10 @@ async function bootstrap() {
 
     // Add cookie parser
     app.use(cookieParser());
+
+    // Configure body parser limits
+    // app.use(express.json({ limit: '50mb' }));
+    // app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
     const pgSessionStore = pgSession(session);
 

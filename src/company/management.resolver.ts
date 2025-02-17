@@ -29,6 +29,7 @@ export class ManagementResolver {
   async createManagementMember(
     @Args('input') input: CreateManagementInput,
   ) {
+    console.log("Input received in resolver:", input);
     return this.companyService.createManagementMember(input);
   }
 
