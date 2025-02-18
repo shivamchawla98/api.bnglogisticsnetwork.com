@@ -65,11 +65,11 @@ export class UserResolver {
   @Mutation(() => User)
   async inviteUser(
     @Args('id', { type: () => ID }) id: number,
-    @Args('input', { type: () => InviteTeamMemberInput, nullable: false }) input: InviteTeamMemberInput
+    @Args('input', { type: () => InviteTeamMemberInput }) input: InviteTeamMemberInput
   ): Promise<User> {
     console.log("Input received in resolver:", {
       id,
-      input: JSON.stringify(input, null, 2)
+      input
     });
     
     if (!input || !input.email) {
