@@ -355,6 +355,9 @@ async inviteTeamMember(inviterId: number, input: InviteTeamMemberInput): Promise
     throw new BadRequestException('Password must be at least 8 characters long');
   }
 
+  console.log(input);
+  console.log("----- input above -----");
+
   const newUser = this.userRepository.create({
     firstName: input.firstName,
     lastName: input.lastName,

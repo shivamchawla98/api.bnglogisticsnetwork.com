@@ -176,8 +176,8 @@ input InviteTeamMemberInput {
   canManageTeam: Boolean
   confirmPassword: String!
   email: String!
-  firstName: String
-  lastName: String
+  firstName: String!
+  lastName: String!
   location: [location!]
   password: String!
 }

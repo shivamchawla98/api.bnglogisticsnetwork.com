@@ -17,10 +17,10 @@ export class InviteTeamMemberInput {
     @Field(() => [location], { nullable: true })
     location?: location[];
 
-    @Field({ nullable: true })
+    @Field()
     firstName?: string;
 
-    @Field({ nullable: true })
+    @Field()
     lastName?: string;
 
     @Field({ nullable: true })
