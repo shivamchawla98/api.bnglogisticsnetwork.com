@@ -15,6 +15,7 @@ import { UpdateCompanyLocationInput } from './dto/update-location.input';
 import { Management } from './entities/management.entity';
 import { CreateManagementInput } from './dto/create-management.input';
 import { UpdateManagementInput } from './dto/update-management.input';
+import { Specialization } from './specialization.entity';
 
 @Injectable()
 export class CompanyService {
@@ -27,6 +28,8 @@ export class CompanyService {
     private readonly locationRepository: Repository<CompanyLocation>,
     @InjectRepository(CompanyServiceEntity)
     private readonly serviceRepository: Repository<CompanyServiceEntity>,
+    @InjectRepository(Specialization)
+    private readonly specializationRepository: Repository<Specialization>,
     @InjectRepository(Certification)
     private readonly certificationRepository: Repository<Certification>,
     @InjectRepository(Management)
@@ -62,6 +65,8 @@ export class CompanyService {
         'owner',
         'locations',
         'services',
+        'specializations',
+        'specializations.service',
         'certifications',
         'users',
         'management'
@@ -194,54 +199,72 @@ export class CompanyService {
     companyId: string,
     input: UpdateCompanyServicesInput,
   ): Promise<Company> {
-    console.log('[Service] Received companyId:', companyId);
     console.log('[Service] Received input:', JSON.stringify(input, null, 2));
 
     try {
       const company = await this.companyRepository.findOne({
         where: { id: parseInt(companyId) },
-        relations: ['services']
+        relations: ['services', 'specializations', 'specializations.service']
       });
 
       if (!company) {
         throw new NotFoundException(`Company with ID ${companyId} not found`);
       }
 
-      // Delete existing services
+      // First, delete existing specializations as they depend on services
+      if (company.specializations?.length > 0) {
+        console.log('[Service] Deleting existing specializations:', company.specializations.length);
+        await this.specializationRepository.remove(company.specializations);
+      }
+
+      // Then, delete existing services
       if (company.services?.length > 0) {
         console.log('[Service] Deleting existing services:', company.services.length);
         await this.serviceRepository.remove(company.services);
       }
 
-      // Create new services
-      console.log('[Service] Creating new services:', input.services.length);
-      const newServices = input.services.map(service => 
-        this.serviceRepository.create({
-          serviceName: service.serviceName,
-          status: service.status,
-          isSpecialization: service.isSpecialization,
-          company,
-        })
+      // Add new services
+      company.services = await Promise.all(
+        input.services.map(async (serviceInput) => {
+          const service = this.serviceRepository.create({
+            serviceName: serviceInput.serviceName,
+            status: serviceInput.status,
+            company,
+          });
+          return await this.serviceRepository.save(service);
+        }),
       );
 
-      // Save new services
-      company.services = await this.serviceRepository.save(newServices);
-      console.log('[Service] Saved new services:', company.services.length);
+      // Add new specializations if any
+      if (input.specializations && input.specializations.length > 0) {
+        const savedServices = await this.serviceRepository.find({
+          where: { company: { id: company.id } }
+        });
 
-      // Refresh and return updated company
-      const updatedCompany = await this.companyRepository.findOne({
-        where: { id: parseInt(companyId) },
-        relations: ['services']
-      });
+        company.specializations = await Promise.all(
+          input.specializations.map(async (specName) => {
+            const service = savedServices.find(s => s.serviceName === specName);
+            if (!service) {
+              throw new Error(`Service ${specName} not found for specialization`);
+            }
 
-      if (!updatedCompany) {
-        throw new Error('Failed to fetch updated company');
+            const specialization = this.specializationRepository.create({
+              company,
+              service
+            });
+            return await this.specializationRepository.save(specialization);
+          })
+        );
+      } else {
+        company.specializations = [];
       }
 
-      return updatedCompany;
+      // Save and return the updated company
+      await this.companyRepository.save(company);
+      return company;
     } catch (error) {
-      console.error('[Service] Error updating services:', error);
-      throw new Error(`Failed to update company services: ${error.message}`);
+      console.error('[Service] Error updating company services:', error);
+      throw error;
     }
   }
 

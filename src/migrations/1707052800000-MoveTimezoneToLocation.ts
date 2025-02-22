@@ -4,8 +4,11 @@ export class MoveTimezoneToLocation1707052800000 implements MigrationInterface {
     name = 'MoveTimezoneToLocation1707052800000'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        // Add timezone column to location table
-        await queryRunner.query(`ALTER TABLE "location" ADD "timezone" character varying`);
+        // Check if the column exists before trying to add it
+        const hasTimezoneColumn = await queryRunner.hasColumn("location", "timezone");
+        if (!hasTimezoneColumn) {
+            await queryRunner.query(`ALTER TABLE "location" ADD "timezone" character varying`);
+        }
 
         // Copy timezone data from user to their primary location if exists
         await queryRunner.query(`
@@ -35,7 +38,10 @@ export class MoveTimezoneToLocation1707052800000 implements MigrationInterface {
             AND l.timezone IS NOT NULL
         `);
 
-        // Drop timezone column from location table
-        await queryRunner.query(`ALTER TABLE "location" DROP COLUMN "timezone"`);
+        // Check if the column exists before trying to drop it
+        const hasTimezoneColumn = await queryRunner.hasColumn("location", "timezone");
+        if (hasTimezoneColumn) {
+            await queryRunner.query(`ALTER TABLE "location" DROP COLUMN "timezone"`);
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { ServiceType } from '../../enums/service-type.enum';
-import { IsArray, IsEnum, IsNotEmpty, ValidateNested, ArrayNotEmpty } from 'class-validator';
+import { IsArray, IsEnum, IsNotEmpty, ValidateNested, ArrayNotEmpty, ArrayMaxSize } from 'class-validator';
 import { Type } from 'class-transformer';
 
 @InputType()
@@ -13,9 +13,6 @@ class ServiceInput {
   @Field()
   @IsNotEmpty({ message: 'Status is required' })
   status: string;
-
-  @Field({ defaultValue: false })
-  isSpecialization: boolean;
 }
 
 @InputType()
@@ -26,4 +23,10 @@ export class UpdateCompanyServicesInput {
   @ValidateNested({ each: true })
   @Type(() => ServiceInput)
   services: ServiceInput[];
+
+  @Field(() => [ServiceType], { nullable: true })
+  @IsArray()
+  @ArrayMaxSize(3, { message: 'Maximum 3 specializations are allowed' })
+  @IsEnum(ServiceType, { each: true })
+  specializations?: ServiceType[];
 }

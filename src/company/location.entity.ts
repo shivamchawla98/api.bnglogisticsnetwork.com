@@ -1,7 +1,7 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinTable, ManyToMany } from 'typeorm';
 import { Company } from './entities/company.entity';
-import { FunctionalDepartment } from 'src/enums/functional-department.enum';
+import { FunctionalDepartment } from '../enums/functional-department.enum';
 import { User } from '../user/entity/profile.entity';
 
 @ObjectType()
@@ -23,6 +23,10 @@ export class CompanyLocation {
   @Column({ nullable: true })
   @Field({ nullable: true })
   city: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  state: string;
 
   @Column({ nullable: true })
   @Field({ nullable: true })

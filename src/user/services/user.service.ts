@@ -163,29 +163,19 @@ export class UserService {
   
 
   async deleteUser(id: number): Promise<boolean> {
-    // First, find the user along with related entities
+    // First, find the user
     const user = await this.userRepository.findOne({
-      where: { id },
-      relations: ['additionalInfo'],  // Add other relations if needed
+      where: { id }
     });
 
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
 
-   
     return await this.userRepository.manager.transaction(async (transactionalEntityManager) => {
       try {
-    
-        // if (user.additionalInfo) {
-        //   await transactionalEntityManager.delete(UserAdditionalInfo, user.additionalInfo.id);
-        // }
-
-        
-
         const result = await transactionalEntityManager.delete(User, id);
         return result.affected > 0;
-
       } catch (error) {
         throw new BadRequestException(`Failed to delete user. Error: ${error.message}`);
       }

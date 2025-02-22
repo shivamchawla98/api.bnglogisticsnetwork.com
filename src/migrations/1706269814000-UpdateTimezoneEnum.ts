@@ -1,10 +1,19 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class UpdateTimezoneEnum1706269814000 implements MigrationInterface {
-    name = 'UpdateTimezoneEnum1706269814000'
-
     public async up(queryRunner: QueryRunner): Promise<void> {
-        // First, drop the existing enum type (if it exists)
+        // First check if the user table exists
+        const userTableExists = await queryRunner.hasTable("user");
+        if (!userTableExists) {
+            return; // Skip if user table doesn't exist
+        }
+
+        // Check if timezone column exists
+        const hasTimezoneColumn = await queryRunner.hasColumn("user", "timezone");
+        if (!hasTimezoneColumn) {
+            return; // Skip if timezone column doesn't exist
+        }
+
         await queryRunner.query(`
             DO $$ BEGIN
                 IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_timezone_enum') THEN
@@ -14,12 +23,10 @@ export class UpdateTimezoneEnum1706269814000 implements MigrationInterface {
             END $$;
         `);
 
-        // Drop the old enum type
         await queryRunner.query(`
             DROP TYPE IF EXISTS "user_timezone_enum";
         `);
 
-        // Create new enum type with updated values
         await queryRunner.query(`
             CREATE TYPE "user_timezone_enum" AS ENUM (
                 'Asia_Calcutta', 'Asia_Kolkata', 'Asia_Bangkok', 'Asia_Colombo', 'Asia_Dhaka',
@@ -39,47 +46,33 @@ export class UpdateTimezoneEnum1706269814000 implements MigrationInterface {
             );
         `);
 
-        // Convert existing data and update column type
-        await queryRunner.query(`
-            ALTER TABLE "user" 
-            ALTER COLUMN "timezone" TYPE "user_timezone_enum" 
-            USING CASE 
-                WHEN timezone LIKE '%Calcutta%' THEN 'Asia_Calcutta'::"user_timezone_enum"
-                WHEN timezone LIKE '%Kolkata%' THEN 'Asia_Kolkata'::"user_timezone_enum"
-                ELSE 'UTC'::"user_timezone_enum"
-            END;
-        `);
+        // Only try to convert if the column exists
+        if (hasTimezoneColumn) {
+            await queryRunner.query(`
+                ALTER TABLE "user" 
+                ALTER COLUMN "timezone" TYPE "user_timezone_enum" 
+                USING CASE 
+                    WHEN timezone LIKE '%Calcutta%' THEN 'Asia_Calcutta'::"user_timezone_enum"
+                    WHEN timezone LIKE '%Kolkata%' THEN 'Asia_Kolkata'::"user_timezone_enum"
+                    ELSE 'UTC'::"user_timezone_enum"
+                END;
+            `);
+        }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        // Convert back to the old format if needed
+        // Check if timezone column exists
+        const hasTimezoneColumn = await queryRunner.hasColumn("user", "timezone");
+        if (!hasTimezoneColumn) {
+            return; // Skip if timezone column doesn't exist
+        }
+
         await queryRunner.query(`
             ALTER TABLE "user" ALTER COLUMN "timezone" TYPE VARCHAR;
         `);
 
         await queryRunner.query(`
-            DROP TYPE "user_timezone_enum";
-        `);
-
-        // Recreate the original enum if needed
-        await queryRunner.query(`
-            CREATE TYPE "user_timezone_enum" AS ENUM (
-                'Asia_Calcutta', 'Asia_Bangkok', 'Asia_Colombo', 'Asia_Dhaka',
-                'Asia_Dubai', 'Asia_HongKong', 'Asia_Ho_Chi_Minh', 'Asia_Hovd',
-                'Asia_Almaty', 'Asia_Amman', 'Asia_Baghdad', 'Asia_Bhaku',
-                'Asia_Beirut', 'Asia_jakarta', 'Asia_Jerusalem', 'Asia_Kabul',
-                'Asia_Karachi'
-            );
-        `);
-
-        // Convert data back and update column type
-        await queryRunner.query(`
-            ALTER TABLE "user" 
-            ALTER COLUMN "timezone" TYPE "user_timezone_enum" 
-            USING CASE 
-                WHEN timezone = 'Asia_Kolkata' THEN 'Asia_Calcutta'::"user_timezone_enum"
-                ELSE 'Asia_Calcutta'::"user_timezone_enum"
-            END;
+            DROP TYPE IF EXISTS "user_timezone_enum";
         `);
     }
 }

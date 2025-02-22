@@ -34,6 +34,7 @@ type Company {
   services: [CompanyService!]!
   size: String
   socialLinks: [String!]
+  specializations: [CompanySpecialization!]
   tagline: String
   taxId: String
   users: [User!]
@@ -52,6 +53,7 @@ type CompanyLocation {
   isPrimary: Boolean!
   phone: String
   pincode: String
+  state: String
   status: String
   timezone: String!
 }
@@ -59,9 +61,14 @@ type CompanyLocation {
 type CompanyService {
   company: Company!
   id: ID!
-  isSpecialization: Boolean!
   serviceName: ServiceType!
   status: String!
+}
+
+type CompanySpecialization {
+  company: Company
+  id: ID!
+  service: CompanyService
 }
 
 """The type of company"""
@@ -357,7 +364,6 @@ input ResetPasswordInput {
 }
 
 input ServiceInput {
-  isSpecialization: Boolean! = false
   serviceName: ServiceType!
   status: String!
 }
@@ -501,6 +507,7 @@ input UpdateCompanyProfileInput {
 
 input UpdateCompanyServicesInput {
   services: [ServiceInput!]!
+  specializations: [ServiceType!]
 }
 
 input UpdateManagementInput {

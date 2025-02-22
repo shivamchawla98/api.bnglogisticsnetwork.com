@@ -21,10 +21,6 @@ export class CompanyService {
   @Field()
   status: string;
 
-  @Column({ default: false })
-  @Field()
-  isSpecialization: boolean;
-
   @ManyToOne(() => Company, company => company.services)
   @Field(() => Company)
   company: Company;

@@ -7,6 +7,7 @@ import { Service } from '../../user/entity/service.entity';
 import { Certification } from '../../user/entity/certification.entity';
 import { CompanyType } from '../enums/company-type.enum';
 import { Management } from './management.entity';
+import { Specialization } from '../specialization.entity';
 
 @Entity('company')
 @ObjectType('Company')
@@ -98,6 +99,10 @@ export class Company {
   @OneToMany(() => CompanyService, service => service.company)
   @Field(() => [CompanyService])
   services: CompanyService[];
+
+  @OneToMany(() => Specialization, specialization => specialization.company, { nullable: true })
+  @Field(() => [Specialization], { nullable: true })
+  specializations?: Specialization[];
 
   @OneToMany(() => Certification, certification => certification.company)
   @Field(() => [Certification])
