@@ -6,9 +6,9 @@ import { FunctionalDepartment } from '../../enums/functional-department.enum';
 @Entity()
 @ObjectType()
 export class Management {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   @Field(() => ID)
-  id: string;
+  id: number;
 
   @Column()
   @Field()
@@ -58,7 +58,7 @@ export class Management {
 
   @Column()
   @Field()
-  companyId: string;
+  companyId: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   @Field()

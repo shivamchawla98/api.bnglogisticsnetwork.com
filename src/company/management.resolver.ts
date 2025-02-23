@@ -22,7 +22,7 @@ export class ManagementResolver {
   async getManagementMember(
     @Args('id', { type: () => ID }) id: string,
   ) {
-    return this.companyService.getManagementMember(id);
+    return this.companyService.getManagementMember(parseInt(id));
   }
 
   @Mutation(() => Management)
@@ -37,6 +37,7 @@ export class ManagementResolver {
   async updateManagementMember(
     @Args('input') input: UpdateManagementInput,
   ) {
+    console.log("Input received in resolver:", input);
     return this.companyService.updateManagementMember(input);
   }
 
@@ -44,6 +45,6 @@ export class ManagementResolver {
   async deleteManagementMember(
     @Args('id', { type: () => ID }) id: string,
   ) {
-    return this.companyService.deleteManagementMember(id);
+    return this.companyService.deleteManagementMember(parseInt(id));
   }
 }

@@ -73,6 +73,8 @@ type CompanySpecialization {
 
 """The type of company"""
 enum CompanyType {
+  CORPORATION
+  LLC
   LLP
   OTHER
   PARTNERSHIP
@@ -270,7 +272,7 @@ input LoginUserInput {
 
 type Management {
   company: Company!
-  companyId: String!
+  companyId: Float!
   createdAt: DateTime!
   department: FunctionalDepartment!
   email: String!
@@ -514,7 +516,7 @@ input UpdateManagementInput {
   department: FunctionalDepartment
   email: String
   firstName: String
-  id: ID!
+  id: String!
   jobRole: String
   lastName: String
   linkedin: String

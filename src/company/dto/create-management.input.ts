@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsEmail, IsEnum, IsOptional, IsString, IsUrl } from 'class-validator';
+import { IsEmail, IsEnum, IsString, IsUrl, IsOptional } from 'class-validator';
 import { FunctionalDepartment } from '../../enums/functional-department.enum';
 
 @InputType()

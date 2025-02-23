@@ -383,7 +383,7 @@ export class CompanyService {
     return company.management || [];
   }
 
-  async getManagementMember(id: string): Promise<Management> {
+  async getManagementMember(id: number): Promise<Management> {
     const member = await this.managementRepository.findOne({
       where: { id },
       relations: ['company'],
@@ -398,7 +398,7 @@ export class CompanyService {
 
   async createManagementMember(input: CreateManagementInput): Promise<Management> {
     const company = await this.companyRepository.findOne({
-      where: { id: +input.companyId },
+      where: { id: parseInt(input.companyId) },
     });
 
     if (!company) {
@@ -407,26 +407,45 @@ export class CompanyService {
 
     const member = this.managementRepository.create({
       ...input,
-      company,
+      companyId: parseInt(input.companyId),
+      company
     });
 
     return this.managementRepository.save(member);
   }
 
   async updateManagementMember(input: UpdateManagementInput): Promise<Management> {
+    if (!input.id) {
+      throw new Error('Management member ID is required for update');
+    }
+
     const member = await this.managementRepository.findOne({
-      where: { id: input.id },
+      where: { id: parseInt(input.id) },
     });
 
     if (!member) {
       throw new NotFoundException(`Management member with ID ${input.id} not found`);
     }
 
-    Object.assign(member, input);
+    // Create a new object with only the fields that are present in the input
+    const updateData = {
+      ...(input.firstName !== undefined && { firstName: input.firstName }),
+      ...(input.lastName !== undefined && { lastName: input.lastName }),
+      ...(input.jobRole !== undefined && { jobRole: input.jobRole }),
+      ...(input.department !== undefined && { department: input.department }),
+      ...(input.email !== undefined && { email: input.email }),
+      ...(input.mobile !== undefined && { mobile: input.mobile }),
+      ...(input.whatsapp !== undefined && { whatsapp: input.whatsapp }),
+      ...(input.linkedin !== undefined && { linkedin: input.linkedin }),
+      ...(input.profilePicture !== undefined && { profilePicture: input.profilePicture })
+    };
+    
+    Object.assign(member, updateData);
+    
     return this.managementRepository.save(member);
   }
 
-  async deleteManagementMember(id: string): Promise<boolean> {
+  async deleteManagementMember(id: number): Promise<boolean> {
     const result = await this.managementRepository.delete(id);
     return result.affected > 0;
   }

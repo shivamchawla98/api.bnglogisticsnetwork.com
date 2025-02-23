@@ -6,6 +6,8 @@ export enum CompanyType {
   PARTNERSHIP = 'PARTNERSHIP',
   PROPRIETORSHIP = 'PROPRIETORSHIP',
   LLP = 'LLP',
+  LLC = 'LLC',
+  CORPORATION = 'CORPORATION',
   OTHER = 'OTHER',
 }
 
