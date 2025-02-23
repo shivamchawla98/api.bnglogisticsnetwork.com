@@ -4,7 +4,7 @@ import { FunctionalDepartment } from '../../enums/functional-department.enum';
 
 @InputType()
 export class UpdateManagementInput {
-  @Field(() => String)
+  @Field(() => String, {nullable: false})
   id: string;
 
   @Field({ nullable: true })

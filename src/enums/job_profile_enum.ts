@@ -4,6 +4,7 @@ export enum JobEnum {
     // Management Roles
     Founder = "Founder",
     Managing_Director = "Managing Director",
+    Management = "Management",
     Director = "Director",
     President = "President",
     Vice_President = "Vice President",

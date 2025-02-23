@@ -226,6 +226,7 @@ enum JobRole {
   Freight_Manager
   General_Manager
   Logistics_Manager
+  Management
   Managing_Director
   Marketing_Executive
   Ocean_Freight_Specialist
