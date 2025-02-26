@@ -35,4 +35,13 @@ export class InviteTeamMemberInput {
     @MinLength(8)
     @IsNotEmpty()
     confirmPassword: string;
+
+    @Field()
+    phone?: string;
+
+    @Field()
+    whatsapp?: string;
+
+    @Field(() => Boolean, {nullable: true})
+    isOwner?: boolean;
 }

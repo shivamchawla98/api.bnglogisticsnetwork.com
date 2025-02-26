@@ -33,6 +33,10 @@ export class User {
   @Field({ nullable: true })
   phone: string;
 
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  whatsapp: string;
+
   @Column({ nullable: false })
   @Field()
   password: string;

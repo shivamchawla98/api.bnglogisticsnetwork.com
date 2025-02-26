@@ -139,6 +139,7 @@ input CreateUserAdditionalInfoInput {
 input CreateUserInput {
   LinkedinProfile: String
   additionalInfo: CreateUserAdditionalInfoInput
+  confirmPassword: String!
   email: String!
   firstName: String
   jobRole: JobRole
@@ -147,6 +148,7 @@ input CreateUserInput {
   phone: String
   status: UserStatus! = ACTIVE
   timezone: Timezone
+  whatsapp: String
 }
 
 """
@@ -178,17 +180,6 @@ type Invitation {
   lastName: String
   team: Team!
   token: String!
-}
-
-input InviteTeamMemberInput {
-  JobRole: JobRole!
-  canManageTeam: Boolean
-  confirmPassword: String!
-  email: String!
-  firstName: String!
-  lastName: String!
-  location: [location!]
-  password: String!
 }
 
 type Invoice {
@@ -305,7 +296,7 @@ type Mutation {
   deleteUser(id: ID!): Boolean!
   generateInviteCodes(count: Float): Boolean!
   generateOtp(email: String!): String!
-  inviteUser(id: ID!, input: InviteTeamMemberInput!): User!
+  inviteUser(id: ID!, input: CreateUserInput!): User!
   login(loginUserInput: LoginUserInput!): LoginResponse!
   logout: Boolean!
   resetPassword(resetPasswordInput: ResetPasswordInput!, userid: Float!): User!
@@ -556,6 +547,7 @@ type User {
   phone: String
   razorpayCustomerId: String
   subscription: Subscription
+  whatsapp: String
 }
 
 type UserInfo {
@@ -571,14 +563,4 @@ enum UserStatus {
   BLOCKED
   INACTIVE
   PENDING
-}
-
-"""Location of member"""
-enum location {
-  Chandigarh_India
-  Chennai_India
-  Dehradun_India
-  Kochin_India
-  Mumbai_India
-  Noida_India
 }

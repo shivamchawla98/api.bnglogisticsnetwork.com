@@ -310,7 +310,7 @@ export class UserService {
     return result.affected > 0;
   }
 
-async inviteTeamMember(inviterId: number, input: InviteTeamMemberInput): Promise<User> {
+async inviteTeamMember(inviterId: number, input: CreateUserInput): Promise<User> {
   const inviter = await this.userRepository.findOne({
     where: { id: inviterId },
     relations: ['company']
@@ -336,9 +336,9 @@ async inviteTeamMember(inviterId: number, input: InviteTeamMemberInput): Promise
   }
 
   // Validate passwords match
-  if (input.password !== input.confirmPassword) {
-    throw new BadRequestException('Passwords do not match');
-  }
+  // if (input.password !== input.confirmPassword) {
+  //   throw new BadRequestException('Passwords do not match');
+  // }
 
   // Validate password strength
   if (input.password.length < 8) {
@@ -352,9 +352,12 @@ async inviteTeamMember(inviterId: number, input: InviteTeamMemberInput): Promise
     firstName: input.firstName,
     lastName: input.lastName,
     email: input.email,
-    JobRole: input.JobRole,
+    JobRole: input.jobRole,
     company: inviter.company,
-    password: input.password // Make sure your User entity has a password field
+    password: input.password,
+    phone: input.phone,
+    whatsapp: input.whatsapp,
+    LinkedinProfile: input.LinkedinProfile,
   });
 
   // newUser.status = invitationTeamMember.pending;
