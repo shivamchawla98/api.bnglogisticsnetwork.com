@@ -414,7 +414,7 @@ export class CompanyService {
     return this.managementRepository.save(member);
   }
 
-  async updateManagementMember(input: UpdateManagementInput): Promise<Management> {
+  async updateManagementMember(input: {id: string } & UpdateManagementInput): Promise<Management> {
     if (!input.id) {
       throw new Error('Management member ID is required for update');
     }

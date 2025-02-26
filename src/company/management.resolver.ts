@@ -35,10 +35,11 @@ export class ManagementResolver {
 
   @Mutation(() => Management)
   async updateManagementMember(
+    @Args('id', { type: () => ID }) id: string,
     @Args('input') input: UpdateManagementInput,
   ) {
-    console.log("Input received in resolver:", input);
-    return this.companyService.updateManagementMember(input);
+    console.log("Input received in resolver:", {id, ...input});
+    return this.companyService.updateManagementMember({id, ...input});
   }
 
   @Mutation(() => Boolean)

@@ -316,7 +316,7 @@ type Mutation {
   updateCompanyLogo(companyId: ID!, logo: String!): Company!
   updateCompanyProfile(companyid: ID!, input: UpdateCompanyProfileInput!): Company!
   updateCompanyServices(companyId: ID!, input: UpdateCompanyServicesInput!): Company!
-  updateManagementMember(input: UpdateManagementInput!): Management!
+  updateManagementMember(id: ID!, input: UpdateManagementInput!): Management!
   updateUser(updateUserInput: UpdateUserInput!): User!
   verifyOtp(email: String!, otp: String!): Boolean!
 }
@@ -517,7 +517,6 @@ input UpdateManagementInput {
   department: FunctionalDepartment
   email: String
   firstName: String
-  id: String!
   jobRole: String
   lastName: String
   linkedin: String
