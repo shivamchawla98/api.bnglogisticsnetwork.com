@@ -9,12 +9,10 @@ import { IsString, IsEmail, MinLength, IsOptional, IsEnum } from 'class-validato
 export class CreateUserInput {
   @Field({ nullable: true })
   @IsString()
-  @IsOptional()
   firstName: string;
 
   @Field({ nullable: true })
   @IsString()
-  @IsOptional()
   lastName: string;
 
   @Field()
@@ -23,8 +21,11 @@ export class CreateUserInput {
 
   @Field({ nullable: true })
   @IsString()
-  @IsOptional()
   phone: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  whatsapp: string;
 
   @Field()
   @IsString()
@@ -54,4 +55,9 @@ export class CreateUserInput {
   @Field(() => CreateUserAdditionalInfoInput, { nullable: true })
   @IsOptional()
   additionalInfo?: CreateUserAdditionalInfoInput;
+
+  @Field()
+  @IsString()
+  @MinLength(6)
+  confirmPassword: string;
 }

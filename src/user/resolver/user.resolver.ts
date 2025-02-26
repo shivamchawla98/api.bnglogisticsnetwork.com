@@ -28,7 +28,7 @@ interface OtpResponse {
 }
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Query(() => [User], { name: 'getAllUsers' })
   async getAllUsers(): Promise<User[]> {
@@ -65,51 +65,51 @@ export class UserResolver {
   @Mutation(() => User)
   async inviteUser(
     @Args('id', { type: () => ID }) id: number,
-    @Args('input', { type: () => InviteTeamMemberInput }) input: InviteTeamMemberInput
+    @Args('input', { type: () => CreateUserInput }) input: CreateUserInput
   ): Promise<User> {
     console.log("Input received in resolver:", {
       id,
       input
     });
-    
+
     if (!input || !input.email) {
       throw new Error('Invalid input: email is required');
     }
-    
+
     return this.userService.inviteTeamMember(id, input);
   }
 
- @Query(() => [User], { name: 'getUsersByCompany' })
+  @Query(() => [User], { name: 'getUsersByCompany' })
   async getUsersByCompany(
     @Args('companyId', { type: () => Int }) companyId: number): Promise<User[]> {
-        return this.userService.getUsersByCompany(companyId);
-                   }
- 
+    return this.userService.getUsersByCompany(companyId);
+  }
+
   @Mutation(() => User, { name: 'assignUserToCompany' })
-    async assignUserToCompany(@Args('userId', { type: () => Int }) userId: number,
-                     @Args('companyId', { type: () => Int }) companyId: number,
-                   ): Promise<User> {
-                     return this.userService.assignUserToCompany(userId, companyId);
-                   }    
+  async assignUserToCompany(@Args('userId', { type: () => Int }) userId: number,
+    @Args('companyId', { type: () => Int }) companyId: number,
+  ): Promise<User> {
+    return this.userService.assignUserToCompany(userId, companyId);
+  }
 
-                   
 
- @Mutation(returns => User)
-  async setupPassword(@Args('userId') userId: number, @Args('newPassword') Password: string,@Args('confirmPassword') confirmPassword: string) {
-                     return this.userService.setupPassword(userId,Password,confirmPassword)
-                   }
-  
+
+  @Mutation(returns => User)
+  async setupPassword(@Args('userId') userId: number, @Args('newPassword') Password: string, @Args('confirmPassword') confirmPassword: string) {
+    return this.userService.setupPassword(userId, Password, confirmPassword)
+  }
+
   @Mutation(returns => String)
   async generateOtp(@Args('email') email: string): Promise<string> {
-     return this.userService.generateAndSendOtp({ email });
-    }
-    @Mutation(() => Boolean)
-    async verifyOtp(
-      @Args('email') email: string,
-      @Args('otp') otp: string,
-    ): Promise<boolean> {
-      return await this.userService.verifyotp(email,otp)
-    }
+    return this.userService.generateAndSendOtp({ email });
+  }
+  @Mutation(() => Boolean)
+  async verifyOtp(
+    @Args('email') email: string,
+    @Args('otp') otp: string,
+  ): Promise<boolean> {
+    return await this.userService.verifyotp(email, otp)
+  }
 
   @Query(() => [User], { name: 'getTeamMembers' })
   async getTeamMembers(
