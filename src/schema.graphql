@@ -475,12 +475,14 @@ input UpdateCompanyCertificationsInput {
 input UpdateCompanyLocationInput {
   address: String
   city: String
+  contactRoles: [LocationContactInput!]
   contacts: String
   country: String
   departments: [FunctionalDepartment!]
   isPrimary: Boolean
   phone: String
   pincode: String
+  state: String
   status: String
   timezone: String
 }
@@ -518,7 +520,6 @@ input UpdateManagementInput {
 
 input UpdateUserInput {
   JobRole: JobRole
-  additionalInfo: CreateUserAdditionalInfoInput
   confirmPassword: String
   email: String
   firstName: String

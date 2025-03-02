@@ -37,7 +37,7 @@ const entities = [
   Subscription,
   // Invoice,
   // Plan,
-  Location,
+  // Location,
   Certification,
   Team,
   // Invitation,
