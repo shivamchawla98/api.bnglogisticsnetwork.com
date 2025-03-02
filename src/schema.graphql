@@ -347,7 +347,7 @@ type Query {
   getUserById(id: ID!): User!
   getUserInvoices(userId: Float!): [Invoice!]!
   getUsersByCompany(companyId: Int!): [User!]!
-  searchCompanies(city: String, country: String, query: String): [Company!]!
+  searchCompanies(certifications: [String!], city: String, country: String, name: String, query: String, services: [String!], state: String): [Company!]!
   validateInviteCode(code: String!): Boolean!
 }
 

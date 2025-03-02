@@ -52,10 +52,21 @@ export class CompanyResolver {
   @Query(() => [Company])
   async searchCompanies(
     @Args('query', { type: () => String, nullable: true }) query: string,
+    @Args('services', { type: () => [String], nullable: true }) services?: string[],
+    @Args('certifications', { type: () => [String], nullable: true }) certifications?: string[],
     @Args('city', { type: () => String, nullable: true }) city?: string,
+    @Args('state', { type: () => String, nullable: true }) state?: string,
     @Args('country', { type: () => String, nullable: true }) country?: string,
+    @Args('name', { type: () => String, nullable: true }) name?: string,
   ): Promise<Company[]> {
-    return this.companyService.searchCompanies(query, { city, country });
+    return this.companyService.searchCompanies(query, { 
+      city, 
+      state,
+      country, 
+      name,
+      services,
+      certifications
+    });
   }
 
   @Public()

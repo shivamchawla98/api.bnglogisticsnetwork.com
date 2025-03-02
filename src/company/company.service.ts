@@ -328,28 +328,70 @@ export class CompanyService {
     return this.companyRepository.save(company);
   }
 
-  async searchCompanies(query: string, filters?: { city?: string; country?: string }): Promise<Company[]> {
+  async searchCompanies(
+    query: string, 
+    filters?: { 
+      city?: string; 
+      state?: string;
+      country?: string; 
+      name?: string;
+      services?: string[];
+      certifications?: string[];
+    }
+  ): Promise<Company[]> {
     const queryBuilder = this.companyRepository
       .createQueryBuilder('company')
       .leftJoinAndSelect('company.owner', 'owner')
       .leftJoinAndSelect('company.locations', 'locations')
-      .leftJoinAndSelect('company.services', 'services');
+      .leftJoinAndSelect('company.services', 'services')
+      .leftJoinAndSelect('company.certifications', 'certifications');
 
+    // Base query search
     if (query) {
-      queryBuilder
-        .where('LOWER(company.companyName) LIKE LOWER(:query)', { query: `%${query}%` })
-        .orWhere('LOWER(company.description) LIKE LOWER(:query)', { query: `%${query}%` })
-        .orWhere('LOWER(locations.city) LIKE LOWER(:query)', { query: `%${query}%` })
-        .orWhere('LOWER(locations.country) LIKE LOWER(:query)', { query: `%${query}%` })
-        .orWhere('LOWER(services.serviceName) LIKE LOWER(:query)', { query: `%${query}%` });
+      queryBuilder.where(`(
+        LOWER(company.companyName) LIKE LOWER(:query) OR
+        LOWER(company.description) LIKE LOWER(:query) OR
+        LOWER(locations.city) LIKE LOWER(:query) OR
+        LOWER(locations.country) LIKE LOWER(:query)
+      )`, { query: `%${query}%` });
     }
 
+    // Search by company name
+    if (filters?.name) {
+      if (query) {
+        queryBuilder.andWhere('LOWER(company.companyName) LIKE LOWER(:name)', { name: `%${filters.name}%` });
+      } else {
+        queryBuilder.where('LOWER(company.companyName) LIKE LOWER(:name)', { name: `%${filters.name}%` });
+      }
+    }
+
+    // Filter by city
     if (filters?.city) {
       queryBuilder.andWhere('LOWER(locations.city) = LOWER(:city)', { city: filters.city });
     }
 
+    // Filter by state
+    if (filters?.state) {
+      queryBuilder.andWhere('LOWER(locations.state) = LOWER(:state)', { state: filters.state });
+    }
+
+    // Filter by country
     if (filters?.country) {
       queryBuilder.andWhere('LOWER(locations.country) = LOWER(:country)', { country: filters.country });
+    }
+
+    // Filter by services (using direct comparison with enum values)
+    if (filters?.services && filters.services.length > 0) {
+      queryBuilder.andWhere('services.serviceName IN (:...serviceNames)', { 
+        serviceNames: filters.services 
+      });
+    }
+
+    // Filter by certifications
+    if (filters?.certifications && filters.certifications.length > 0) {
+      queryBuilder.andWhere('certifications.certificationName IN (:...certNames)', { 
+        certNames: filters.certifications 
+      });
     }
 
     return queryBuilder.getMany();
