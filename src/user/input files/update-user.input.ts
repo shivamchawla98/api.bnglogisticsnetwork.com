@@ -45,7 +45,7 @@ export class UpdateUserInput {
   @IsOptional()
   JobRole?: JobRole;
 
-  @Field(() => CreateUserAdditionalInfoInput, { nullable: true })
-  @IsOptional()
-  additionalInfo?: CreateUserAdditionalInfoInput;
+  // @Field(() => CreateUserAdditionalInfoInput, { nullable: true })
+  // @IsOptional()
+  // additionalInfo?: CreateUserAdditionalInfoInput;
 }
